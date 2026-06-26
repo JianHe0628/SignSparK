@@ -1,0 +1,15 @@
+# @package _global_
+# Datasets are selected by name; the loader globs ${base_path}/<split>/*.lmdb
+# and keeps the files whose name matches an entry in the lists below.
+# Released datasets: CSL-Daily, How2Sign (see DATA.md).
+load_lmdb: True
+base_path: "${oc.env:DATA_ROOT,data}/lmdb"
+train_data:
+  - "CSL-Daily"
+  # - "How2Sign"
+dev_data:
+  - "CSL-Daily"
+  # - "How2Sign"
+test_data:
+  - "CSL-Daily"
+  # - "How2Sign"

@@ -1,0 +1,41 @@
+# @package _global_
+seed: 102
+
+# Keyframe Params
+train_keyframe_mask_prob: 0.1  # Keyframe for Classifier-Free Guidance
+val_keyframe_mask_prob: 0.1  # Keyframe for Classifier-Free Guidance
+keyframe_conditioned: True
+text_mask_prob: 0.1  # Text for Classifier-Free Guidance
+text_conditioned: True
+keyframe_selection_mode: 3  # 'segment' or 'random'
+custom_keyframe_file: 'null'  # Path to custom keyframe selection file
+joint_mask_prob: 0  # Masking Joint
+
+# Loss Params
+lambda_flow: 0.5
+lambda_recon: 1.0
+lambda_velocity: 0.5
+lambda_acceleration: 0.1
+
+# Model Params
+model_arch: unet_large  # must match inference (released checkpoints are unet_large)
+final_type: 2  # Unet Large Only
+unet_out_mult: 8 # Unet Large Output Multiplier
+seq_len: 304
+hidden_t_dim: 512
+hidden_dim: 512
+dropout: 0.1
+text_enc_name: "CLIP" # CLIP or GEMMA or QWEN
+text_enc_dim: 640 # 640 or 768 or 1024
+text_enc_ver: 'M-CLIP/XLM-Roberta-Large-Vit-B-16Plus'  # M-CLIP/XLM-Roberta-Large-Vit-B-16Plus or google/embeddinggemma-300m or Qwen/Qwen3-Embedding-0.6B
+
+# Training Params
+log_interval: 500
+save_interval: 10000
+eval_interval: 10000
+learning_steps: 1000000
+smooth_window: 0
+specify_lang: True
+length_mask_conditioned: True
+batch_probe: False
+flip_left_hand: True  # released LMDBs store left in SMPLX-left; flip to right-hand frame (also enables both-hand training)

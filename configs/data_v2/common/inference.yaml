@@ -1,0 +1,36 @@
+# @package _global_
+seed: 102
+
+# Model Params
+model_arch: unet_large
+final_type: 2  # Unet Large Only
+unet_out_mult: 8 # Unet Large Output Multiplier
+seq_len: 304
+hidden_t_dim: 512
+hidden_dim: 512
+dropout: 0.1
+text_enc_name: "CLIP" # CLIP or GEMMA or QWEN
+text_enc_dim: 640 # 640 or 768 or 1024
+text_enc_ver: 'M-CLIP/XLM-Roberta-Large-Vit-B-16Plus'  # M-CLIP/XLM-Roberta-Large-Vit-B-16Plus or google/embeddinggemma-300m or Qwen/Qwen3-Embedding-0.6B
+specify_lang: True
+flip_left_hand: False  # new LMDBs store true left hand; True flips it to right-hand convention (model was trained on right-frame hands)
+length_mask_conditioned: True
+custom_keyframe_file: 'null'  # Path to custom keyframe selection file
+keyframe_selection_mode: 3  # 'segment' or 'random'
+
+eval:
+  model_path: "${oc.env:SIGNSPARK_CKPT_DIR,checkpoints}/hand/ema_0.9999_200000.pt"
+  seq_len: 304
+  seed: 123
+  batch_size: 128
+  text_guidance_scale: -1  # -1 = no classifier-free guidance; >0 sets the text guidance scale
+  keyframes_mask_all: False  # mask all keyframes for fully unconditional (text-only) sampling
+  candidate_num: 1
+  max_samples: -1  # cap number of samples to evaluate (-1 = whole split)
+  ode_stepnum: 50
+  split: "test"
+  clamp_step: 0
+  clip_denoised: False
+  is_debug: False
+  note: "eval"
+  sampler: "torchdiffeq"  # "torchdiffeq" or "heun"
