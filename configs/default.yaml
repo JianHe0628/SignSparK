@@ -1,0 +1,10 @@
+defaults:
+  - data_v2: hand
+  - _self_
+
+hydra:
+  run:
+    # Output directory for runs. Override with OUTPUT_DIR or hydra.run.dir=...
+    dir: ${oc.env:OUTPUT_DIR,outputs}/${hydra.job.name}/
+  job:
+    name: signspark

@@ -1,0 +1,31 @@
+# Pip install (alternative to environment.yml).
+# Targets CUDA 12.8 wheels — required for Blackwell / RTX 50-series (sm_120).
+# For a different CUDA version, change the index URL (e.g. .../whl/cu121) and
+# drop the +cu128 local tags from torch/torchvision.
+#   pip install -r requirements.txt
+
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.10.0+cu128
+torchvision==0.25.0+cu128
+numpy==2.2.6
+torchdiffeq==0.2.5
+accelerate==1.10.1
+transformers==4.56.1
+huggingface_hub<1.0   # transformers 4.56.1 requires <1.0
+sentence-transformers==5.1.2
+multilingual-clip==1.0.10
+hydra-core==1.3.2
+omegaconf==2.3.0
+einops==0.8.1
+lmdb==2.2.0
+scipy==1.15.3
+matplotlib
+blobfile==3.0.0
+wandb==0.21.3
+tqdm
+
+# Visualization / metrics (tools/visualize.py)
+smplx
+trimesh
+pyrender
+opencv-python

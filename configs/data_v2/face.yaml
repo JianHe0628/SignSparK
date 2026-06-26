@@ -1,0 +1,28 @@
+# @package _global_
+defaults:
+  #- data: qg
+  - common: train
+  - splits: split
+  - _self_
+
+lr: 0.00001
+anneal_lr: True
+batch_size: 64
+microbatch: 64
+ema_rate: 0.9999
+gradient_clipping: 1.0 # disable by default
+weight_decay: 0.01
+
+# Data Params
+resume_checkpoint: False
+dataset_feat: "face" # body, hand, or face
+
+# Misc
+note: "face"
+checkpoint_path: "checkpoints/face"
+is_debug: False
+
+eval:
+  model_path: "${oc.env:SIGNSPARK_CKPT_DIR,checkpoints}/face/ema_0.9999_200000.pt"
+
+

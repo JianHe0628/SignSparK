@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Environments
+.env
+.venv/
+venv/
+
+# Experiment outputs / logs
+outputs/
+checkpoints/
+logs/
+wandb/
+*.log
+multirun/
+
+# Model weights & data
+*.pt
+*.pth
+*.ckpt
+*.lmdb/
+data/
+
+# Hugging Face repo cards (uploaded to the Hub, not part of the code release)
+HF_*.md
+
+# Misc
+.DS_Store
