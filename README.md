@@ -36,6 +36,7 @@ combined to produce the full signer.
 
 - [ ] **FAST** keyframe segmentation code (temporal sign-segment detection).
 - [ ] Back-translation evaluation weights.
+- [ ] To Fix an issue with provided hf data, whereby CSL-Daily rotations appear odd for one-handed signing samples.
 
 ## Installation
 
