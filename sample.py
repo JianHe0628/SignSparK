@@ -58,7 +58,7 @@ def main(cfg):
 
     if cfg.eval.text_guidance_scale != -1.0:
         print(f"### Setting the text guidance scale to {cfg.eval.text_guidance_scale} for evaluation")
-        text_scale = th.ones(cfg.eval.batch_size, device=dist_util.dev()) * cfg.eval.text_guidance_scale
+        text_scale = th.tensor(cfg.eval.text_guidance_scale, device=dist_util.dev())
         _model = ClassifierFreeSampleModel(_model, text_scale=text_scale)
         output_path = output_path + f"_textscale{cfg.eval.text_guidance_scale}"
     
