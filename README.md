@@ -11,6 +11,10 @@ Centre for Vision, Speech and Signal Processing (CVSSP), University of Surrey
 [![Paper](https://img.shields.io/badge/arXiv-2603.10446-b31b1b.svg)](https://arxiv.org/abs/2603.10446)
 [![Project Page](https://img.shields.io/badge/Project-Page-1f6feb.svg)](https://cogvis-cvssp.github.io/papers/signspark/)
 
+<img src="assets/signspark_qualitatives.gif" alt="SignSparK qualitative results" width="100%">
+
+*Full-resolution video on the [project page](https://cogvis-cvssp.github.io/papers/signspark/).*
+
 </div>
 
 ---
@@ -34,9 +38,7 @@ combined to produce the full signer.
 
 ### Coming soon
 
-- [ ] **FAST** keyframe segmentation code (temporal sign-segment detection).
 - [ ] Back-translation evaluation weights.
-- [ ] To Fix an issue with provided hf data, whereby CSL-Daily rotations appear odd for one-handed signing samples.
 
 ## Installation
 
@@ -94,6 +96,21 @@ Configure paths via environment variables (copy `.env.example` → `.env`):
 `OUTPUT_DIR` (training output) and `SIGNSPARK_CKPT_DIR` (released weights for
 sampling) are deliberately separate — to sample your own freshly-trained model,
 point `eval.model_path=` at the file under `OUTPUT_DIR`.
+
+## FAST keyframe segmentation
+
+**FAST**, the temporal sign language segmentor behind SignSparK's sparse
+keyframes, now ships in our
+**[Sign Language Toolkit](https://sign-language-toolkit.readthedocs.io/)**:
+
+```bash
+pip install "signlangtk[wilor]==0.2.3"   # drop [wilor] if you already have WiLoR .h5 features
+python fast/segment.py clip.mp4 -o segments.pt --keyframes
+```
+
+It labels every frame `0` (non-sign), `2` (sign onset) or `1` (continuation), following
+the `segment` field of the LMDB schema. For RGB video inputs, it will additionally need
+`signlangtk[wilor]` and the licence-gated MANO models. See **[fast/README.md](fast/README.md)**.
 
 ## Training
 

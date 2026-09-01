@@ -74,12 +74,18 @@ once flipped, is an extra right-hand sample).
 
 ## 3. How the LMDBs were built (reference only)
 
-For transparency: the released databases are produced by the authors' SMPL-X
-fitting + re-optimization pipeline (FAST segmentation → per-clip SMPL-X
-parameters → 6D features + segment annotations), which is a separate component
-described in the paper and **not required to use this repo**. If you want to
-build LMDBs from your own data, replicate the record schema above
-(`np.savez` the eight fields per clip; add the `__meta__` index).
+**You do not need this section to use the repo** — the released LMDBs are ready
+to train on. It is here for transparency, and for anyone building their own.
+
+We produced ours in three stages:
+
+1. **Segment**: FAST labels every frame sign / non-sign, giving the `segment`
+   field ([fast/](fast/README.md)).
+2. **Extract**: per-clip SMPL-X parameters (WiLoR, NLF etc.), then re-optimize all parameters.
+3. **Export**: those parameters converted to the 6D features in §2.
+
+To build your own, all that matters is matching the record schema in §2:
+`np.savez` the eight fields per clip, and add the `__meta__` index.
 
 ## 4. Datasets & licensing
 
