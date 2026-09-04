@@ -27,5 +27,8 @@ data/
 # Hugging Face repo cards (uploaded to the Hub, not part of the code release)
 HF_*.md
 
+# FAST segmentor — embargoed until the toolkit is public (kept locally, untracked)
+fast/
+
 # Misc
 .DS_Store

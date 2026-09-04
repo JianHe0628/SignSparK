@@ -80,7 +80,7 @@ to train on. It is here for transparency, and for anyone building their own.
 We produced ours in three stages:
 
 1. **Segment**: FAST labels every frame sign / non-sign, giving the `segment`
-   field ([fast/](fast/README.md)).
+   field.
 2. **Extract**: per-clip SMPL-X parameters (WiLoR, NLF etc.), then re-optimize all parameters.
 3. **Export**: those parameters converted to the 6D features in §2.
 

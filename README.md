@@ -100,17 +100,17 @@ point `eval.model_path=` at the file under `OUTPUT_DIR`.
 ## FAST keyframe segmentation
 
 **FAST**, the temporal sign language segmentor behind SignSparK's sparse
-keyframes, now ships in our
-**[Sign Language Toolkit](https://sign-language-toolkit.readthedocs.io/)**:
+keyframes, labels every frame `0` (non-sign), `2` (sign onset) or `1`
+(continuation), following the `segment` field of the LMDB schema.
 
-```bash
-pip install "signlangtk[wilor]==0.2.3"   # drop [wilor] if you already have WiLoR .h5 features
-python fast/segment.py clip.mp4 -o segments.pt --keyframes
-```
+<div align="center">
+  <img src="assets/FAST_Overview.png" alt="FAST architecture and keyframe selection policy" width="100%">
+</div>
 
-It labels every frame `0` (non-sign), `2` (sign onset) or `1` (continuation), following
-the `segment` field of the LMDB schema. For RGB video inputs, it will additionally need
-`signlangtk[wilor]` and the licence-gated MANO models. See **[fast/README.md](fast/README.md)**.
+FAST is currently deployed as an internal toolkit and is under embargo until the
+end of September 2026. The public release, along with the scripts that wire it
+to SignSparK, will follow here. The currently released LMDBs already carry the `segment`
+field, so the repo currently still works without the toolkit.
 
 ## Training
 
