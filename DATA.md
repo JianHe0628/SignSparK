@@ -1,14 +1,13 @@
 # Data
 
-SignSparK trains and samples from **prebuilt LMDB databases**. We release the
-LMDBs for **CSL-Daily** and **How2Sign** directly — they already contain the 6D
-pose features, translations, glosses and segment annotations used in the paper,
-so there is **no local build step** for users of this repo.
+SignSparK trains and samples from **prebuilt LMDB databases**. We have now fully released the
+LMDBs for **CSL-Daily**, **How2Sign** and **PHOENIX-2014T**. They contain the 6D pose features, translations, glosses and segment
+annotations used in the paper, so **no local build step** is required for this repo.
 
 ## 1. Download
 
 ```bash
-python tools/download_data.py --datasets CSL-Daily How2Sign --dest ./data
+python tools/download_data.py --datasets CSL-Daily How2Sign PHOENIX-2014T --dest ./data
 export DATA_ROOT=$(pwd)/data
 ```
 
@@ -17,13 +16,19 @@ This populates the layout the loader expects (globbed from
 
 ```
 ${DATA_ROOT}/lmdb/
-├── train/   CSL-Daily_reopt_train.lmdb/  How2Sign_reopt_train.lmdb/
+├── train/   CSL-Daily_reopt_train.lmdb/  How2Sign_reopt_train.lmdb/  PHOENIX-2014T_reopt_train.lmdb/
 ├── dev/     CSL-Daily_reopt_dev.lmdb/    ...
 └── test/    CSL-Daily_reopt_test.lmdb/   ...
 ```
 
 Select which dataset a run uses via `train_data` / `dev_data` / `test_data` in
 `split.yaml` (names are substring-matched against the `.lmdb` filenames).
+
+| Dataset | Spoken language | LMDB name prefix |
+| --- | --- | --- |
+| CSL-Daily | Chinese | `CSL-Daily_reopt_` |
+| How2Sign | English | `How2Sign_reopt_` |
+| PHOENIX-2014T | German | `PHOENIX-2014T_reopt_` |
 
 Inspect a database to confirm contents:
 
@@ -74,8 +79,8 @@ once flipped, is an extra right-hand sample).
 
 ## 3. How the LMDBs were built (reference only)
 
-**You do not need this section to use the repo** — the released LMDBs are ready
-to train on. It is here for transparency, and for anyone building their own.
+**You do not need this section to use the repo**: the released LMDBs are already ready
+to be trained on. This section is here for transparency, and for anyone building their own.
 
 We produced ours in three stages:
 
@@ -86,9 +91,3 @@ We produced ours in three stages:
 
 To build your own, all that matters is matching the record schema in §2:
 `np.savez` the eight fields per clip, and add the `__meta__` index.
-
-## 4. Datasets & licensing
-
-Obtain CSL-Daily and How2Sign from their original sources and follow their
-licenses; the released LMDBs contain SMPL-X pose features derived from these
-corpora and are provided for research use under the same terms.

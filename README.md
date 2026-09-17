@@ -64,11 +64,13 @@ pip install -r requirements.txt
 ## Data & checkpoints
 
 SignSparK reads pose data from **LMDB** databases. We release prebuilt LMDBs for
-**CSL-Daily** and **How2Sign** (6D pose features + translations + glosses +
-segment annotations) — no local build step required:
+**CSL-Daily**, **How2Sign** and **PHOENIX-2014T** (6D pose features +
+translations + glosses + segment annotations). Thus, no local build step is required:
+
+> **Note:** The released datasets and checkpoints are higher quality than those used in the paper. Datasets have been reoptimized for improved contact points, while checkpoints have been trained on 15x more data, so reproduced results may exceed the originally reported numbers.
 
 ```bash
-python tools/download_data.py --datasets CSL-Daily How2Sign --dest ./data
+python tools/download_data.py --datasets CSL-Daily How2Sign PHOENIX-2014T --dest ./data
 export DATA_ROOT=$(pwd)/data
 python tools/inspect_lmdb.py ${DATA_ROOT}/lmdb/train/CSL-Daily_reopt_train.lmdb  # sanity-check
 ```
@@ -159,7 +161,7 @@ Key sampling options (`eval.*`, set in the inference config or overridden):
 | Option | Meaning |
 | --- | --- |
 | `eval.split` | which split to sample: `test` / `dev` / `train` |
-| `test_data` (or `dev_data`/`train_data`) | **which dataset** for that split, e.g. `'[CSL-Daily]'` or `'[How2Sign]'` — the eval set is chosen by this list in `split.yaml`, *not* a `dataset=` arg |
+| `test_data` (or `dev_data`/`train_data`) | **which dataset** for that split, e.g. `'[CSL-Daily]'`, `'[How2Sign]'` or `'[PHOENIX-2014T]'` — the eval set is chosen by this list in `split.yaml`, *not* a `dataset=` arg |
 | `eval.ode_stepnum` | number of ODE sampling steps |
 | `eval.candidate_num` | samples drawn per clip |
 | `eval.max_samples` | cap clips sampled (`-1` = whole split) |
@@ -220,5 +222,6 @@ ideas from [FlowSeq](https://github.com/dongzhuoyao/flowseq), while evaluation m
 The **code** in this repository is released under the [Apache License 2.0](LICENSE).
 
 The released **datasets and model checkpoints** are derived from CSL-Daily,
-How2Sign and BOBSL and are provided for **non-commercial research use only**,
-under the terms of those source datasets — not under Apache 2.0.
+How2Sign, PHOENIX-2014T and BOBSL and are provided for **non-commercial research
+use only**,
+under the terms of those source datasets.

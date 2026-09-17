@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Download the prebuilt SignSparK LMDBs from the HF Hub into ${DATA_ROOT}/lmdb/.
 
-    python tools/download_data.py --datasets CSL-Daily How2Sign --dest ./data
+    python tools/download_data.py --datasets CSL-Daily How2Sign PHOENIX-2014T --dest ./data
 """
 
 import argparse
@@ -15,7 +15,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--repo-id", default=os.getenv("SIGNSPARK_DATA_REPO", DEFAULT_REPO_ID),
                    help="Hugging Face dataset repo id holding the LMDBs.")
-    p.add_argument("--datasets", nargs="+", default=["CSL-Daily", "How2Sign"],
+    p.add_argument("--datasets", nargs="+", default=["CSL-Daily", "How2Sign", "PHOENIX-2014T"],
                    help="Which datasets to fetch (matched against the names in split.yaml).")
     p.add_argument("--dest", default=os.getenv("DATA_ROOT", "./data"),
                    help="DATA_ROOT; LMDBs land under <dest>/lmdb/<split>/.")
