@@ -77,6 +77,8 @@ python tools/inspect_lmdb.py ${DATA_ROOT}/lmdb/train/CSL-Daily_reopt_train.lmdb 
 
 Pretrained checkpoints (per stream) download into `$SIGNSPARK_CKPT_DIR`:
 
+> **Note:** Our official checkpoint is trained on CSL-Daily, How2Sign, BOBSL, and CSL-News. PHOENIX14T is excluded due to poor 3D estimation quality on its low-resolution footage, though the processed data remains available on HuggingFace.
+
 ```bash
 python tools/download_models.py --streams hand body face --dest ./checkpoints
 export SIGNSPARK_CKPT_DIR=$(pwd)/checkpoints   # -> <stream>/ema_0.9999_<iter>.pt
