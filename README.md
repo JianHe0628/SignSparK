@@ -22,8 +22,8 @@ Centre for Vision, Speech and Signal Processing (CVSSP), University of Surrey
 ## Overview
 
 **SignSparK** is a Conditional Flow Matching framework for **multilingual Sign
-Language Production (SLP)**. Instead of regressing dense pose sequences — which
-collapses toward the mean and yields under-articulated signing — SignSparK
+Language Production (SLP)**. Instead of regressing dense pose sequences, which
+collapses toward the mean and yields under-articulated signing, SignSparK
 learns from **sparse keyframes** that capture the underlying kinematic
 distribution of human signing, then synthesises fluid 3D signing sequences
 conditioned on spoken-language text and those keyframes (Keyframe-to-Pose
@@ -31,14 +31,17 @@ generation). The framework supports four sign languages and achieves
 state-of-the-art results across multiple benchmarks.
 
 This repository contains the **flow-matching training and sampling code**. The
-model is trained per body stream — **hand**, **body**, and **face** — which are
+model is trained per body stream (i.e. **hand**, **body**, and **face**), which are
 combined to produce the full signer.
 
 > 📄 Paper: https://arxiv.org/abs/2603.10446 &nbsp;·&nbsp; 🌐 Project page: https://cogvis-cvssp.github.io/papers/signspark/
 
-### Coming soon
+### Release status
 
-- [ ] Back-translation evaluation weights.
+- [x] **Datasets**: prebuilt LMDBs for CSL-Daily, How2Sign and PHOENIX-2014T · 🤗 [LionelLow/SignSparK_data](https://huggingface.co/datasets/LionelLow/SignSparK_data)
+- [x] **SignSparK checkpoints**: hand / body / face streams · 🤗 [LionelLow/SignSparK](https://huggingface.co/LionelLow/SignSparK)
+- [x] **Back-translation code and weights**: [SignSparK-BT Repo](https://github.com/JianHe0628/SignSparK_BT) · 🤗 [LionelLow/SignSparK_BT](https://huggingface.co/LionelLow/SignSparK_BT)
+- [ ] **FAST keyframe segmentor** — *pending toolkit embargo, expected end of September 2026* ([details](#fast-keyframe-segmentation))
 
 ## Installation
 
@@ -87,7 +90,7 @@ export SIGNSPARK_CKPT_DIR=$(pwd)/checkpoints   # -> <stream>/ema_0.9999_<iter>.p
 See **[DATA.md](DATA.md)** for the record schema, directory layout, segment
 labels, and the left-hand convention. Datasets and checkpoints live on the Hub:
 
-> 🤗 Data: [LionelLow/SignSparK_data](https://huggingface.co/datasets/LionelLow/SignSparK_data) · Models: [LionelLow/SignSparK](https://huggingface.co/LionelLow/SignSparK)
+> 🤗 Data: [LionelLow/SignSparK_data](https://huggingface.co/datasets/LionelLow/SignSparK_data) · Models: [LionelLow/SignSparK](https://huggingface.co/LionelLow/SignSparK) · Back-translation: [LionelLow/SignSparK_BT](https://huggingface.co/LionelLow/SignSparK_BT)
 
 Configure paths via environment variables (copy `.env.example` → `.env`):
 
@@ -199,7 +202,48 @@ must download the (license-gated) SMPL-X model files yourself. See
 
 **Metrics.** For the quantitative evaluation protocol (MPJPE / PA-MPJPE / DTW),
 use the official evaluation code at
-[github.com/2000ZRL/SOKE](https://github.com/2000ZRL/SOKE).
+[github.com/2000ZRL/SOKE](https://github.com/2000ZRL/SOKE). For back-translation
+metrics (BLEU / chrF / ROUGE), see below.
+
+## Back-translation evaluation
+
+**[SignSparK-BT](https://github.com/JianHe0628/SignSparK_BT)** is the evaluation
+companion to this repo: it translates generated SMPL+MANO poses back to spoken
+language and scores them with BLEU, chrF and ROUGE. It reads the **same LMDBs**
+as SignSparK, so `DATA_ROOT` can carry without changes.
+
+```bash
+git clone https://github.com/JianHe0628/SignSparK_BT.git && cd SignSparK_BT
+conda env create -f environment.yml && conda activate signspark-bt && pip install -e .
+
+# same DATA_ROOT as SignSparK; back-translation weights are a separate download
+export DATA_ROOT=/path/to/signspark/data
+python tools/download_models.py --datasets PHOENIX-2014T CSL-Daily How2Sign --dest ./checkpoints
+```
+
+Score a `sample_all.py` run by pointing it at the **body** and **hand** dumps
+from that same run. Note that the face stream is unused, so the model takes body 60 + both
+hands 90 each = 240 dims. Note also that `sample.py` writes each dump *next to the checkpoint
+it loaded*, under `<ckpt dir>/debug0_eulerstepsize<steps>_can<n>_anchor<0|1>_samples/`:
+
+```bash
+RUN=debug0_eulerstepsize50_can1_anchor0_samples
+signspark-bt score checkpoints/PHOENIX-2014T \
+    --body-npy ${SIGNSPARK_CKPT_DIR}/body/${RUN}/seed123_clampstep0_PHOENIX14T.npy \
+    --hand-npy ${SIGNSPARK_CKPT_DIR}/hand/${RUN}/seed123_clampstep0_PHOENIX14T.npy
+```
+
+(the `seed` and trailing name come from `eval.seed`, `eval.clamp_step` and
+`eval.note` of that run.)
+
+It scores ground-truth and generated poses in one pass and reports the drop
+between them. Released models and the updated score tables:
+🤗 [LionelLow/SignSparK_BT](https://huggingface.co/LionelLow/SignSparK_BT) ·
+[full README](https://github.com/JianHe0628/SignSparK_BT#scoring-sign-language-production).
+
+> **Note:** The released back-translation models are retrained on the
+> reoptimized LMDBs, so both the ground-truth ceiling and the reported drop
+> differ from the paper.
 
 ## Citation
 
@@ -207,10 +251,12 @@ If you find this work useful, please cite:
 
 ```bibtex
 @inproceedings{low2026signspark,
-  title     = {SignSparK: Efficient Multilingual Sign Language Production via Sparse Keyframe Learning},
-  author    = {Low, Jianhe and Symeonidis-Herzig, Alexandre and Ivashechkin, Maksym and Sincan, {\"O}zge Mercano{\u{g}}lu and Bowden, Richard},
-  booktitle = {European Conference on Computer Vision (ECCV)},
-  year      = {2026}
+  title={SignSparK: Efficient Multilingual Sign Language Production via Sparse Keyframe Learning},
+  author={Low, Jianhe and Symeonidis-Herzig, Alexandre and Ivashechkin, Maksym and Sincan, Ozge Mercanoglu and Bowden, Richard},
+  booktitle={European Conference on Computer Vision},
+  pages={648--670},
+  year={2026},
+  organization={Springer}
 }
 ```
 
