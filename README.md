@@ -41,7 +41,8 @@ combined to produce the full signer.
 - [x] **Datasets**: prebuilt LMDBs for CSL-Daily, How2Sign and PHOENIX-2014T · 🤗 [LionelLow/SignSparK_data](https://huggingface.co/datasets/LionelLow/SignSparK_data)
 - [x] **SignSparK checkpoints**: hand / body / face streams · 🤗 [LionelLow/SignSparK](https://huggingface.co/LionelLow/SignSparK)
 - [x] **Back-translation code and weights**: [SignSparK-BT Repo](https://github.com/JianHe0628/SignSparK_BT) · 🤗 [LionelLow/SignSparK_BT](https://huggingface.co/LionelLow/SignSparK_BT)
-- [ ] **FAST keyframe segmentor** — *pending toolkit embargo, expected end of September 2026* ([details](#fast-keyframe-segmentation))
+- [x] **FAST keyframe segmentor**: via our Sign Language Toolkit · [fast/](fast/README.md)
+- [x] **Retrieval code**: [SignSparK-Retrieval Repo](https://github.com/JianHe0628/SignSparK_Retrieval)
 
 ## Installation
 
@@ -114,10 +115,15 @@ keyframes, labels every frame `0` (non-sign), `2` (sign onset) or `1`
   <img src="assets/FAST_Overview.png" alt="FAST architecture and keyframe selection policy" width="100%">
 </div>
 
-FAST is currently deployed as an internal toolkit and is under embargo until the
-end of September 2026. The public release, along with the scripts that wire it
-to SignSparK, will follow here. The currently released LMDBs already carry the `segment`
-field, so the repo currently still works without the toolkit.
+FAST ships in our **Sign Language Toolkit**:
+
+```bash
+pip install "signlangtk[wilor]==0.3.1"   # drop [wilor] if you already have WiLoR .h5 features
+python fast/segment.py clip.mp4 -o segments.pt --keyframes
+```
+
+For RGB video inputs, it additionally needs `signlangtk[wilor]` and the licence-gated
+MANO models. See **[fast/README.md](fast/README.md)**.
 
 ## Training
 
